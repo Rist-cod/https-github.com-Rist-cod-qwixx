@@ -15,11 +15,27 @@ struct ContentView: View {
     
     @State var crossHidden = false
     
+    //rijen
+    var optelRij = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+    var aftrekRij = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2]
+    
     //waarden per kleur (dictionary)
     @State var waardeRood: [Int: Bool]
     @State var waardeGeel: [Int: Bool]
     @State var waardeGroen: [Int: Bool]
     @State var waardeBlauw: [Int: Bool]
+    
+    //vars voor de scores --> optellen van waarden die waar zijn per kleur
+    @State var countRed = 0
+    @State var countYellow = 0
+    @State var countGreen = 0
+    @State var countBlue = 0
+    
+    //variabelen voor de eindscores
+    @State var pointsRed = 0
+    @State var pointsYellow = 0
+    @State var pointsGreen = 0
+    @State var pointsBlue = 0
     
     //rijgesloten
     @State var roodGesloten = false
@@ -27,8 +43,13 @@ struct ContentView: View {
     @State var groenGesloten = false
     @State var blauwGesloten = false
     
+    //puntentelling
+    var aantalKeer = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+    var punten = [1: 1, 2: 3, 3: 6, 4: 10, 5: 15, 6: 21, 7: 28, 8: 36, 9: 45, 10: 55, 11: 66, 12: 78]
+    
     
     init() {
+        //init waarde van iedere waarde binnen de dictionarys op false zetten
         var dictionaryRood: [Int: Bool] = [:]
         for i in 2...12 {
             dictionaryRood[i] = false
@@ -59,40 +80,40 @@ struct ContentView: View {
             
             //MARK: testing space for views and stuff
             // making a lock in a circle with a greyish background
-            HStack(spacing: 2) {
-                ZStack{
-                    Rectangle()
-                        .frame(width: breed, height: hoog)
-                    Circle()
-                        .frame(width: breed - 10, height: hoog - 10)
-                        .foregroundColor(Color(hue: 1.0, saturation: 0.101, brightness: 0.93))
-                    Image(systemName: "lock.open")
-                    
-                }
-                
-                //MARK: test for square with number
-                ZStack {
-                    Image(systemName: "square")
-                        .resizable()
-                        .frame(width: breed, height: hoog)
-                    Image(systemName: "square")
-                        .resizable()
-                        .frame(width: breed - 3 , height: hoog - 3)
-                        .foregroundColor(Color(hue: 1.0, saturation: 0.101, brightness: 0.93, opacity: 0.97))
-                        .background(Color(hue: 1.0, saturation: 0.101, brightness: 0.93, opacity: 0.97))
-                        .cornerRadius(6)
-                    Text("2")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .foregroundColor(.red)
-                        .onTapGesture{
-                            crossHidden.toggle()
-                        }
-                    
-                }
-                .frame(width: breed, height: hoog)
-                //end of zstack
-            }
+            //            HStack(spacing: 2) {
+            //                ZStack{
+            //                    Rectangle()
+            //                        .frame(width: breed, height: hoog)
+            //                    Circle()
+            //                        .frame(width: breed - 10, height: hoog - 10)
+            //                        .foregroundColor(Color(hue: 1.0, saturation: 0.101, brightness: 0.93))
+            //                    Image(systemName: "lock.open")
+            //
+            //                }
+            //
+            //                //MARK: test for square with number
+            //                ZStack {
+            //                    Image(systemName: "square")
+            //                        .resizable()
+            //                        .frame(width: breed, height: hoog)
+            //                    Image(systemName: "square")
+            //                        .resizable()
+            //                        .frame(width: breed - 3 , height: hoog - 3)
+            //                        .foregroundColor(Color(hue: 1.0, saturation: 0.101, brightness: 0.93, opacity: 0.97))
+            //                        .background(Color(hue: 1.0, saturation: 0.101, brightness: 0.93, opacity: 0.97))
+            //                        .cornerRadius(6)
+            //                    Text("2")
+            //                        .font(.largeTitle)
+            //                        .fontWeight(.bold)
+            //                        .foregroundColor(.red)
+            //                        .onTapGesture{
+            //                            crossHidden.toggle()
+            //                        }
+            //
+            //                }
+            //                .frame(width: breed, height: hoog)
+            //                //end of zstack
+            //            }
             
             
             
@@ -112,7 +133,7 @@ struct ContentView: View {
                         .frame(width: breed-20, height: hoog * 0.5)
                     
                     //ieder vakje met daarin een nummer
-                    ForEach(2...12, id: \.self) {
+                    ForEach(optelRij, id: \.self) {
                         number in
                         ZStack {
                             Image(systemName: "square")
@@ -136,21 +157,17 @@ struct ContentView: View {
                                     .padding(.all, 2.0)
                                     .frame(width: breed, height: hoog)
                                     .rotationEffect(.degrees(45))
-                                    .onTapGesture {
-                                        crossHidden.toggle()
-                                        waardeRood[number] = crossHidden
-                                    }
-                            } else {
-                                Image(systemName: "square.fill")
-                                    .resizable()
-                                    .foregroundColor(Color(red: 1.0, green: 0.0, blue: 0.0, opacity: 0.07))
-                                    .frame(width: breed, height: hoog)
-                                    .onTapGesture {
-                                        crossHidden.toggle()
-                                        waardeRood[number] = crossHidden
-                                    }
                             }
-                            
+                            // actie genereren wanneer je op een vakje tikt, rekening houden met of de rij niet gesloten is
+                        }.onTapGesture {
+                            if roodGesloten != true{
+                                crossHidden.toggle()
+                                waardeRood[number] = crossHidden
+                                countRed = waardeRood.values.filter{ $0 }.count
+                                if countRed > 0{
+                                    pointsRed = punten[countRed] ?? 0
+                                }
+                            }
                         }
                     }
                     
@@ -168,12 +185,11 @@ struct ContentView: View {
                         else {
                             Image(systemName: "lock.open")
                         }
-                        
-                        
                     }
                     .onTapGesture {
-                        roodGesloten.toggle()
-                    }
+                        if countRed >= 5{
+                            roodGesloten.toggle()
+                        }}
                     .padding(.leading, 5)
                 }
             }.ignoresSafeArea()
@@ -192,7 +208,7 @@ struct ContentView: View {
                         .padding(.trailing, 3.0)
                         .frame(width: breed-20, height: hoog * 0.5)
                     
-                    ForEach(2...12, id: \.self) {
+                    ForEach(optelRij, id: \.self) {
                         number in
                         ZStack {
                             Image(systemName: "square")
@@ -216,21 +232,13 @@ struct ContentView: View {
                                     .padding(.all, 2.0)
                                     .frame(width: breed, height: hoog)
                                     .rotationEffect(.degrees(45))
-                                    .onTapGesture {
-                                        crossHidden.toggle()
-                                        waardeGeel[number] = crossHidden
-                                    }
-                            } else {
-                                Image(systemName: "square.fill")
-                                    .resizable()
-                                    .foregroundColor(Color(red: 1.0, green: 0.0, blue: 0.0, opacity: 0.07))
-                                    .frame(width: breed, height: hoog)
-                                    .onTapGesture {
-                                        crossHidden.toggle()
-                                        waardeGeel[number] = crossHidden
-                                    }
+ 
                             }
                             
+                        }                                   .onTapGesture {
+                            crossHidden.toggle()
+                            waardeGeel[number] = crossHidden
+                            countYellow = waardeGeel.values.filter{ $0 }.count
                         }
                     }
                     ZStack{
@@ -267,7 +275,7 @@ struct ContentView: View {
                         .padding(.trailing, 3.0)
                         .frame(width: breed-20, height: hoog * 0.5)
                     
-                    ForEach(2...12, id: \.self) {
+                    ForEach(aftrekRij, id: \.self) {
                         number in
                         ZStack {
                             Image(systemName: "square")
@@ -342,7 +350,7 @@ struct ContentView: View {
                         .padding(.trailing, 3.0)
                         .frame(width: breed-20, height: hoog * 0.5)
                     
-                    ForEach(2...12, id: \.self) {
+                    ForEach(aftrekRij, id: \.self) {
                         number in
                         ZStack {
                             Image(systemName: "square")
@@ -403,9 +411,23 @@ struct ContentView: View {
                 }
             }.ignoresSafeArea()
             
+            //MARK: gray background with points en crosses and failed throws
+            HStack(spacing: 5){
+                Text("aantal kruisjes rood")
+                Text(String(countRed))
+                Text("punten rood")
+                Text(String(pointsRed))
+                Text(String(countYellow))
+                Text(String(countGreen))
+                Text(String(countBlue))
+
+            }
+            //MARK: score count and total
+            
         }
     }
 }
+
 
 
 struct ContentView_Previews: PreviewProvider {
