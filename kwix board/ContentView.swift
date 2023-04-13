@@ -167,6 +167,7 @@ struct ContentView: View {
                                 if countRed > 0{
                                     pointsRed = punten[countRed] ?? 0
                                 }
+
                             }
                         }
                     }
@@ -187,9 +188,17 @@ struct ContentView: View {
                         }
                     }
                     .onTapGesture {
-                        if countRed >= 5{
+                        if countRed >= 5 && roodGesloten != true{
                             roodGesloten.toggle()
-                        }}
+                            countRed += 1
+                            pointsRed = punten[countRed] ?? 0
+                        }
+                        else if roodGesloten == true{
+                            roodGesloten.toggle()
+                            countRed -= 1
+                            pointsRed = punten[countRed] ?? 0
+                        }
+                    }
                     .padding(.leading, 5)
                 }
             }.ignoresSafeArea()
@@ -422,6 +431,8 @@ struct ContentView: View {
                     Text(String(pointsRed))
                         .font(.largeTitle)
                         .fontWeight(.bold)
+                }.onTapGesture {
+
                 }
                 
                 Text(String(countYellow))
