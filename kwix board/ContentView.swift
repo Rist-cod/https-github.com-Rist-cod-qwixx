@@ -413,10 +413,17 @@ struct ContentView: View {
             
             //MARK: gray background with points en crosses and failed throws
             HStack(spacing: 5){
-                Text("aantal kruisjes rood")
-                Text(String(countRed))
-                Text("punten rood")
-                Text(String(pointsRed))
+                
+                ZStack{
+                    Image(systemName: "rectangle.portrait")
+                        .resizable()
+                        .foregroundColor(Color(.red))
+                        .frame(width: 80, height: 50)
+                    Text(String(pointsRed))
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                }
+                
                 Text(String(countYellow))
                 Text(String(countGreen))
                 Text(String(countBlue))
