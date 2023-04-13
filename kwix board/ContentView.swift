@@ -14,10 +14,19 @@ var hoog: CGFloat = breed
 struct ContentView: View {
     
     @State var crossHidden = false
+    
+    //waarden per kleur (dictionary)
     @State var waardeRood: [Int: Bool]
     @State var waardeGeel: [Int: Bool]
     @State var waardeGroen: [Int: Bool]
     @State var waardeBlauw: [Int: Bool]
+    
+    //rijgesloten
+    @State var roodGesloten = false
+    @State var geelGesloten = false
+    @State var groenGesloten = false
+    @State var blauwGesloten = false
+    
     
     init() {
         var dictionaryRood: [Int: Bool] = [:]
@@ -89,18 +98,20 @@ struct ContentView: View {
             
             //MARK: red first row of numbers
             ZStack {
+                // achtergrond kleur
                 Rectangle()
                     .padding(.leading, 20.0)
                     .frame(width: breed * 12.7, height: hoog + 10)
                     .foregroundColor(Color(red: 0.81, green: 0.098, blue: 0.157))
                 
-                
+                // hstack horizontaal weergeven van de vakjes
                 HStack(alignment: .center, spacing: 0){
                     Image(systemName: "arrowtriangle.right.fill")
                         .resizable()
                         .padding(.trailing, 3.0)
                         .frame(width: breed-20, height: hoog * 0.5)
                     
+                    //ieder vakje met daarin een nummer
                     ForEach(2...12, id: \.self) {
                         number in
                         ZStack {
@@ -142,14 +153,28 @@ struct ContentView: View {
                             
                         }
                     }
+                    
+                    // slotje rechts
                     ZStack{
                         Circle()
                             .frame(width: breed - 8, height: hoog - 8)
                         Circle()
                             .frame(width: breed - 10, height: hoog - 10)
                             .foregroundColor(Color(hue: 1.0, saturation: 0.101, brightness: 0.93))
-                        Image(systemName: "lock.open")
-                    }.padding(.leading, 5)
+                        
+                        if roodGesloten == true {
+                            Image(systemName: "lock.slash")
+                        }
+                        else {
+                            Image(systemName: "lock.open")
+                        }
+                        
+                        
+                    }
+                    .onTapGesture {
+                        roodGesloten.toggle()
+                    }
+                    .padding(.leading, 5)
                 }
             }.ignoresSafeArea()
             
@@ -214,8 +239,17 @@ struct ContentView: View {
                         Circle()
                             .frame(width: breed - 10, height: hoog - 10)
                             .foregroundColor(Color(hue: 1.0, saturation: 0.101, brightness: 0.93))
-                        Image(systemName: "lock.open")
-                    }.padding(.leading, 5)
+                        if geelGesloten == true {
+                            Image(systemName: "lock.slash")
+                        }
+                        else {
+                            Image(systemName: "lock.open")
+                        }
+                    }
+                    .onTapGesture {
+                        geelGesloten.toggle()
+                    }
+                    .padding(.leading, 5)
                 }
             }.ignoresSafeArea()
             
@@ -280,8 +314,17 @@ struct ContentView: View {
                         Circle()
                             .frame(width: breed - 10, height: hoog - 10)
                             .foregroundColor(Color(hue: 1.0, saturation: 0.101, brightness: 0.93))
-                        Image(systemName: "lock.open")
-                    }.padding(.leading, 5)
+                        if groenGesloten == true {
+                            Image(systemName: "lock.slash")
+                        }
+                        else {
+                            Image(systemName: "lock.open")
+                        }
+                    }
+                    .onTapGesture {
+                        groenGesloten.toggle()
+                    }
+                    .padding(.leading, 5)
                 }
             }.ignoresSafeArea()
             
@@ -346,8 +389,17 @@ struct ContentView: View {
                         Circle()
                             .frame(width: breed - 10, height: hoog - 10)
                             .foregroundColor(Color(hue: 1.0, saturation: 0.101, brightness: 0.93))
-                        Image(systemName: "lock.open")
-                    }.padding(.leading, 5)
+                        if blauwGesloten == true {
+                            Image(systemName: "lock.slash")
+                        }
+                        else {
+                            Image(systemName: "lock.open")
+                        }
+                    }
+                    .onTapGesture {
+                        blauwGesloten.toggle()
+                    }
+                    .padding(.leading, 5)
                 }
             }.ignoresSafeArea()
             
