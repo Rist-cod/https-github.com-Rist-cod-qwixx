@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-var breed: CGFloat = 50
+var breed: CGFloat = 60
 var hoog: CGFloat = breed
 
 
@@ -135,41 +135,45 @@ struct ContentView: View {
                     //ieder vakje met daarin een nummer
                     ForEach(optelRij, id: \.self) {
                         number in
-                        ZStack {
-                            Image(systemName: "square")
-                                .resizable()
-                                .frame(width: breed, height: hoog)
-                                .tag(number)
-                            Image(systemName: "square")
-                                .resizable()
-                                .frame(width: breed - 3 , height: hoog - 3)
-                                .foregroundColor(Color(hue: 1.0, saturation: 0.101, brightness: 0.93, opacity: 0.97))
-                                .background(Color(hue: 1.0, saturation: 0.101, brightness: 0.93, opacity: 0.97))
-                                .cornerRadius(6)
-                            Text(String(number))
-                                .font(.largeTitle)
-                                .fontWeight(.bold)
-                                .foregroundColor(Color(red: 0.811, green: 0.096, blue: 0.157))
-                            
-                            if waardeRood[number] == true {
-                                Image(systemName: "plus")
-                                    .resizable()
-                                    .padding(.all, 2.0)
-                                    .frame(width: breed, height: hoog)
-                                    .rotationEffect(.degrees(45))
-                            }
-                            // actie genereren wanneer je op een vakje tikt, rekening houden met of de rij niet gesloten is
-                        }.onTapGesture {
-                            if roodGesloten != true{
-                                crossHidden.toggle()
-                                waardeRood[number] = crossHidden
-                                countRed = waardeRood.values.filter{ $0 }.count
-                                if countRed > 0{
-                                    pointsRed = punten[countRed] ?? 0
+                        
+                        Button {
+                                if roodGesloten != true{
+                                    crossHidden.toggle()
+                                    waardeRood[number] = crossHidden
+                                    countRed = waardeRood.values.filter{ $0 }.count
+                                    if countRed > 0{
+                                        pointsRed = punten[countRed] ?? 0
+                                    }
                                 }
-
-                            }
+                        } label: {
+                            ZStack {
+                                Image(systemName: "square")
+                                    .resizable()
+                                    .frame(width: breed, height: hoog)
+                                    .tag(number)
+                                Image(systemName: "square")
+                                    .resizable()
+                                    .frame(width: breed - 3 , height: hoog - 3)
+                                    .foregroundColor(Color(hue: 1.0, saturation: 0.101, brightness: 0.93, opacity: 0.97))
+                                    .background(Color(hue: 1.0, saturation: 0.101, brightness: 0.93, opacity: 0.97))
+                                    .cornerRadius(6)
+                                Text(String(number))
+                                    .font(.largeTitle)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(Color(red: 0.811, green: 0.096, blue: 0.157))
+                                
+                                if waardeRood[number] == true {
+                                    Image(systemName: "multiply")
+                                        .resizable()
+                                        .padding(.all, 2.0)
+                                        .frame(width: breed, height: hoog)
+                                }
                         }
+
+                        
+
+                            // actie genereren wanneer je op een vakje tikt, rekening houden met of de rij niet gesloten is
+                        }.foregroundColor(.black)
                     }
                     
                     // slotje rechts
@@ -205,57 +209,67 @@ struct ContentView: View {
             
             //MARK: yellow second row of numbers
             ZStack {
+                // achtergrond kleur
                 Rectangle()
                     .padding(.leading, 20.0)
                     .frame(width: breed * 12.7, height: hoog + 10)
                     .foregroundColor(Color(red: 0.995, green: 0.848, blue: 0.028))
                 
-                
+                // hstack horizontaal weergeven van de vakjes
                 HStack(alignment: .center, spacing: 0){
                     Image(systemName: "arrowtriangle.right.fill")
                         .resizable()
                         .padding(.trailing, 3.0)
                         .frame(width: breed-20, height: hoog * 0.5)
                     
+                    //ieder vakje met daarin een nummer
                     ForEach(optelRij, id: \.self) {
                         number in
-                        ZStack {
-                            Image(systemName: "square")
-                                .resizable()
-                                .frame(width: breed, height: hoog)
-                                .tag(number)
-                            Image(systemName: "square")
-                                .resizable()
-                                .frame(width: breed - 3 , height: hoog - 3)
-                                .foregroundColor(Color(red: 1.0, green: 0.979, blue: 0.903))
-                                .background(Color(red: 1.0, green: 0.979, blue: 0.903))
-                                .cornerRadius(6)
-                            Text(String(number))
-                                .font(.largeTitle)
-                                .fontWeight(.bold)
-                                .foregroundColor(Color(red: 0.996, green: 0.846, blue: 0.027))
-                            
-                            if waardeGeel[number] == true {
-                                Image(systemName: "plus")
+                        
+                        Button {
+                                if geelGesloten != true{
+                                    crossHidden.toggle()
+                                    waardeGeel[number] = crossHidden
+                                    countYellow = waardeGeel.values.filter{ $0 }.count
+                                    if countYellow > 0{
+                                        pointsYellow = punten[countYellow] ?? 0
+                                    }
+                                }
+                        } label: {
+                            ZStack {
+                                Image(systemName: "square")
                                     .resizable()
-                                    .padding(.all, 2.0)
                                     .frame(width: breed, height: hoog)
-                                    .rotationEffect(.degrees(45))
- 
-                            }
-                            
-                        }                                   .onTapGesture {
-                            crossHidden.toggle()
-                            waardeGeel[number] = crossHidden
-                            countYellow = waardeGeel.values.filter{ $0 }.count
+                                    .tag(number)
+                                Image(systemName: "square")
+                                    .resizable()
+                                    .frame(width: breed - 3 , height: hoog - 3)
+                                    .foregroundColor(Color(red: 1.0, green: 0.979, blue: 0.903))
+                                    .background(Color(red: 1.0, green: 0.979, blue: 0.903))
+                                    .cornerRadius(6)
+                                Text(String(number))
+                                    .font(.largeTitle)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(Color(red: 0.996, green: 0.846, blue: 0.027))
+                                
+                                if waardeGeel[number] == true {
+                                    Image(systemName: "multiply")
+                                        .resizable()
+                                        .padding(.all, 2.0)
+                                        .frame(width: breed, height: hoog)
+                                }
                         }
+                            // actie genereren wanneer je op een vakje tikt, rekening houden met of de rij niet gesloten is
+                        }.foregroundColor(.black)
                     }
+                    // slotje rechts
                     ZStack{
                         Circle()
                             .frame(width: breed - 8, height: hoog - 8)
                         Circle()
                             .frame(width: breed - 10, height: hoog - 10)
                             .foregroundColor(Color(hue: 1.0, saturation: 0.101, brightness: 0.93))
+                        
                         if geelGesloten == true {
                             Image(systemName: "lock.slash")
                         }
@@ -264,7 +278,16 @@ struct ContentView: View {
                         }
                     }
                     .onTapGesture {
-                        geelGesloten.toggle()
+                        if countYellow >= 5 && geelGesloten != true{
+                            geelGesloten.toggle()
+                            countYellow += 1
+                            pointsYellow = punten[countYellow] ?? 0
+                        }
+                        else if geelGesloten == true{
+                            geelGesloten.toggle()
+                            countYellow -= 1
+                            pointsYellow = punten[countYellow] ?? 0
+                        }
                     }
                     .padding(.leading, 5)
                 }
@@ -272,65 +295,67 @@ struct ContentView: View {
             
             //MARK: green third row of numbers
             ZStack {
+                // achtergrond kleur
                 Rectangle()
                     .padding(.leading, 20.0)
                     .frame(width: breed * 12.7, height: hoog + 10)
                     .foregroundColor(Color(red: 0.0, green: 0.676, blue: 0.309))
                 
-                
+                // hstack horizontaal weergeven van de vakjes
                 HStack(alignment: .center, spacing: 0){
                     Image(systemName: "arrowtriangle.right.fill")
                         .resizable()
                         .padding(.trailing, 3.0)
                         .frame(width: breed-20, height: hoog * 0.5)
                     
-                    ForEach(aftrekRij, id: \.self) {
+                    //ieder vakje met daarin een nummer
+                    ForEach(optelRij, id: \.self) {
                         number in
-                        ZStack {
-                            Image(systemName: "square")
-                                .resizable()
-                                .frame(width: breed, height: hoog)
-                                .tag(number)
-                            Image(systemName: "square")
-                                .resizable()
-                                .frame(width: breed - 3 , height: hoog - 3)
-                                .foregroundColor(Color(red: 1.0, green: 0.979, blue: 0.903))
-                                .background(Color(red: 1.0, green: 0.979, blue: 0.903))
-                                .cornerRadius(6)
-                            Text(String(number))
-                                .font(.largeTitle)
-                                .fontWeight(.bold)
-                                .foregroundColor(Color(red: -0.02, green: 0.676, blue: 0.307))
-                            
-                            if waardeGroen[number] == true {
-                                Image(systemName: "plus")
-                                    .resizable()
-                                    .padding(.all, 2.0)
-                                    .frame(width: breed, height: hoog)
-                                    .rotationEffect(.degrees(45))
-                                    .onTapGesture {
-                                        crossHidden.toggle()
-                                        waardeGroen[number] = crossHidden
+                        
+                        Button {
+                                if groenGesloten != true{
+                                    crossHidden.toggle()
+                                    waardeGroen[number] = crossHidden
+                                    countGreen = waardeGroen.values.filter{ $0 }.count
+                                    if countGreen > 0{
+                                        pointsGreen = punten[countGreen] ?? 0
                                     }
-                            } else {
-                                Image(systemName: "square.fill")
+                                }
+                        } label: {
+                            ZStack {
+                                Image(systemName: "square")
                                     .resizable()
-                                    .foregroundColor(Color(red: 1.0, green: 0.0, blue: 0.0, opacity: 0.07))
                                     .frame(width: breed, height: hoog)
-                                    .onTapGesture {
-                                        crossHidden.toggle()
-                                        waardeGroen[number] = crossHidden
-                                    }
-                            }
-                            
+                                    .tag(number)
+                                Image(systemName: "square")
+                                    .resizable()
+                                    .frame(width: breed - 3 , height: hoog - 3)
+                                    .foregroundColor(Color(red: 1.0, green: 0.979, blue: 0.903))
+                                    .background(Color(red: 1.0, green: 0.979, blue: 0.903))
+                                    .cornerRadius(6)
+                                Text(String(number))
+                                    .font(.largeTitle)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(Color(red: -0.02, green: 0.676, blue: 0.307))
+                                
+                                if waardeGroen[number] == true {
+                                    Image(systemName: "multiply")
+                                        .resizable()
+                                        .padding(.all, 2.0)
+                                        .frame(width: breed, height: hoog)
+                                }
                         }
+                            // actie genereren wanneer je op een vakje tikt, rekening houden met of de rij niet gesloten is
+                        }.foregroundColor(.black)
                     }
+                    // slotje rechts
                     ZStack{
                         Circle()
                             .frame(width: breed - 8, height: hoog - 8)
                         Circle()
                             .frame(width: breed - 10, height: hoog - 10)
                             .foregroundColor(Color(hue: 1.0, saturation: 0.101, brightness: 0.93))
+                        
                         if groenGesloten == true {
                             Image(systemName: "lock.slash")
                         }
@@ -339,7 +364,16 @@ struct ContentView: View {
                         }
                     }
                     .onTapGesture {
-                        groenGesloten.toggle()
+                        if countGreen >= 5 && groenGesloten != true{
+                            groenGesloten.toggle()
+                            countGreen += 1
+                            pointsGreen = punten[countGreen] ?? 0
+                        }
+                        else if groenGesloten == true{
+                            groenGesloten.toggle()
+                            countGreen -= 1
+                            pointsGreen = punten[countGreen] ?? 0
+                        }
                     }
                     .padding(.leading, 5)
                 }
@@ -347,65 +381,67 @@ struct ContentView: View {
             
             //MARK: blue fourth row of numbers
             ZStack {
+                // achtergrond kleur
                 Rectangle()
                     .padding(.leading, 20.0)
                     .frame(width: breed * 12.7, height: hoog + 10)
                     .foregroundColor(Color(red: 0.006, green: 0.343, blue: 0.627))
                 
-                
+                // hstack horizontaal weergeven van de vakjes
                 HStack(alignment: .center, spacing: 0){
                     Image(systemName: "arrowtriangle.right.fill")
                         .resizable()
                         .padding(.trailing, 3.0)
                         .frame(width: breed-20, height: hoog * 0.5)
                     
-                    ForEach(aftrekRij, id: \.self) {
+                    //ieder vakje met daarin een nummer
+                    ForEach(optelRij, id: \.self) {
                         number in
-                        ZStack {
-                            Image(systemName: "square")
-                                .resizable()
-                                .frame(width: breed, height: hoog)
-                                .tag(number)
-                            Image(systemName: "square")
-                                .resizable()
-                                .frame(width: breed - 3 , height: hoog - 3)
-                                .foregroundColor(Color(red: 1.0, green: 0.979, blue: 0.903))
-                                .background(Color(red: 1.0, green: 0.979, blue: 0.903))
-                                .cornerRadius(6)
-                            Text(String(number))
-                                .font(.largeTitle)
-                                .fontWeight(.bold)
-                                .foregroundColor(Color(red: 0.009, green: 0.341, blue: 0.628))
-                            
-                            if waardeBlauw[number] == true {
-                                Image(systemName: "plus")
-                                    .resizable()
-                                    .padding(.all, 2.0)
-                                    .frame(width: breed, height: hoog)
-                                    .rotationEffect(.degrees(45))
-                                    .onTapGesture {
-                                        crossHidden.toggle()
-                                        waardeBlauw[number] = crossHidden
+                        
+                        Button {
+                                if blauwGesloten != true{
+                                    crossHidden.toggle()
+                                    waardeBlauw[number] = crossHidden
+                                    countBlue = waardeBlauw.values.filter{ $0 }.count
+                                    if countBlue > 0{
+                                        pointsBlue = punten[countBlue] ?? 0
                                     }
-                            } else {
-                                Image(systemName: "square.fill")
+                                }
+                        } label: {
+                            ZStack {
+                                Image(systemName: "square")
                                     .resizable()
-                                    .foregroundColor(Color(red: 1.0, green: 0.0, blue: 0.0, opacity: 0.07))
                                     .frame(width: breed, height: hoog)
-                                    .onTapGesture {
-                                        crossHidden.toggle()
-                                        waardeBlauw[number] = crossHidden
-                                    }
-                            }
-                            
+                                    .tag(number)
+                                Image(systemName: "square")
+                                    .resizable()
+                                    .frame(width: breed - 3 , height: hoog - 3)
+                                    .foregroundColor(Color(red: 1.0, green: 0.979, blue: 0.903))
+                                    .background(Color(red: 1.0, green: 0.979, blue: 0.903))
+                                    .cornerRadius(6)
+                                Text(String(number))
+                                    .font(.largeTitle)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(Color(red: 0.009, green: 0.341, blue: 0.628))
+                                
+                                if waardeBlauw[number] == true {
+                                    Image(systemName: "multiply")
+                                        .resizable()
+                                        .padding(.all, 2.0)
+                                        .frame(width: breed, height: hoog)
+                                }
                         }
+                            // actie genereren wanneer je op een vakje tikt, rekening houden met of de rij niet gesloten is
+                        }.foregroundColor(.black)
                     }
+                    // slotje rechts
                     ZStack{
                         Circle()
                             .frame(width: breed - 8, height: hoog - 8)
                         Circle()
                             .frame(width: breed - 10, height: hoog - 10)
                             .foregroundColor(Color(hue: 1.0, saturation: 0.101, brightness: 0.93))
+                        
                         if blauwGesloten == true {
                             Image(systemName: "lock.slash")
                         }
@@ -414,15 +450,27 @@ struct ContentView: View {
                         }
                     }
                     .onTapGesture {
-                        blauwGesloten.toggle()
+                        if countBlue >= 5 && blauwGesloten != true{
+                            blauwGesloten.toggle()
+                            countBlue += 1
+                            pointsBlue = punten[countBlue] ?? 0
+                        }
+                        else if blauwGesloten == true{
+                            blauwGesloten.toggle()
+                            countBlue -= 1
+                            pointsBlue = punten[countBlue] ?? 0
+                        }
                     }
                     .padding(.leading, 5)
                 }
             }.ignoresSafeArea()
             
             //MARK: gray background with points en crosses and failed throws
+
+            //MARK: score count and total
             HStack(spacing: 5){
                 
+                // scorecount for red
                 ZStack{
                     Image(systemName: "rectangle.portrait")
                         .resizable()
@@ -431,17 +479,44 @@ struct ContentView: View {
                     Text(String(pointsRed))
                         .font(.largeTitle)
                         .fontWeight(.bold)
-                }.onTapGesture {
-
                 }
                 
-                Text(String(countYellow))
-                Text(String(countGreen))
-                Text(String(countBlue))
+                //scorecount for yellow
+                ZStack{
+                    Image(systemName: "rectangle.portrait")
+                        .resizable()
+                        .foregroundColor(Color(.yellow))
+                        .frame(width: 80, height: 50)
+                    Text(String(pointsYellow))
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                }
+                
+                // scorecount for green
+                ZStack{
+                    Image(systemName: "rectangle.portrait")
+                        .resizable()
+                        .foregroundColor(Color(.green))
+                        .frame(width: 80, height: 50)
+                    Text(String(pointsGreen))
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                }
+
+                // scorecount for green
+                ZStack{
+                    Image(systemName: "rectangle.portrait")
+                        .resizable()
+                        .foregroundColor(Color(.blue))
+                        .frame(width: 80, height: 50)
+                    Text(String(pointsBlue))
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                }
+                
+                // minus the total score formulated by the 4 ticking boxes failed throw (-5 per ticked box)
 
             }
-            //MARK: score count and total
-            
         }
     }
 }
